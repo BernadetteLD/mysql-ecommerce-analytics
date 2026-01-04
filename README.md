@@ -1,7 +1,7 @@
 **E-commerce Analysis- Online Retail Dataset**
                               
 ***Project Overview:**
-This project focuses on cleaning, exploring, and analyzing the Online Retail Dataset which I took from Kaggle (https://www.kaggle.com/datasets/ulrikthygepedersen/online-retail-dataset/data). The dataset contains transactional data for an online store, including information about invoices, products, customers, and countries.
+This project focuses on cleaning, exploring, and analyzing the Online Retail Dataset which I took from Kaggle. The dataset contains transactional data for an online store, including information about invoices, products, customers, and countries.
 
 **The main objectives of this project were to:**
 * Clean and prepare the dataset for analysis by correcting corrupted columns, handling nulls, removing duplicates, and converting date formats.
@@ -55,6 +55,6 @@ During this project, I was particularly interested in:
 
 **Technologies Used**
 * SQL (MySQL): For cleaning, EDA, and insights generation.
-* Kaggle Dataset: Online Retail Dataset
+* Kaggle Dataset: Online Retail Dataset (https://www.kaggle.com/datasets/ulrikthygepedersen/online-retail-dataset/data)
 * Data cleaning techniques: Handling nulls, duplicates, and encoding issues.
 * Analytical techniques: Aggregation, ranking, segmentation, and time series analysis.

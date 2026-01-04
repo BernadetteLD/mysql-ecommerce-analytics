@@ -1,0 +1,57 @@
+#EDA#
+-- How many invoices and customers are in the dataset?
+-- This tells us the dataset size and how many distinct customers are placing orders.
+SELECT 
+    COUNT(DISTINCT InvoiceNo) AS total_invoices,
+    COUNT(DISTINCT CustomerID) AS total_customers
+FROM ecommerce_analytics.online_retail_dataset;
+
+-- Total number of items sold and total revenue
+-- Gives a sense of overall sales volume and business revenue.
+
+SELECT 
+    SUM(Quantity) AS total_items_sold,
+    SUM(Quantity * UnitPrice) AS total_revenue
+FROM ecommerce_analytics.online_retail_dataset;
+
+-- Top-selling products
+-- Highlights the most popular products and helps understand customer preferences.
+
+SELECT Description, SUM(Quantity) AS total_sold
+FROM ecommerce_analytics.online_retail_dataset
+GROUP BY Description
+ORDER BY total_sold DESC
+LIMIT 10;
+
+-- Top customers by revenue
+-- Identifies the biggest contributors to revenue, useful for loyalty or marketing strategies
+
+SELECT CustomerID, SUM(Quantity * UnitPrice) AS revenue
+FROM ecommerce_analytics.online_retail_dataset
+GROUP BY CustomerID
+ORDER BY revenue DESC
+LIMIT 10;
+
+-- Revenue and total items by country
+-- Shows geographical distribution of sales — helps focus on key markets.
+
+SELECT Country, SUM(Quantity * UnitPrice) AS revenue, SUM(Quantity) AS total_items
+FROM ecommerce_analytics.online_retail_dataset
+GROUP BY Country
+ORDER BY revenue DESC;
+
+-- Number of cancelled invoices
+-- Provides insight into order cancellations and potential issues with products or processes.
+
+SELECT COUNT(*) AS cancelled_invoices
+FROM ecommerce_analytics.online_retail_dataset
+WHERE InvoiceNo LIKE 'C%';
+
+-- Monthly revenue trend
+-- Shows sales trends, peaks, and seasonal patterns over time.
+
+SELECT DATE_FORMAT(InvoiceDate, '%Y-%m') AS `year_month`,
+       SUM(Quantity * UnitPrice) AS revenue
+FROM ecommerce_analytics.online_retail_dataset
+GROUP BY `year_month`
+ORDER BY `year_month`;

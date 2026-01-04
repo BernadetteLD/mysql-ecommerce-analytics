@@ -1,0 +1,75 @@
+# Business Insights — Key Findings
+-- 1. Top-selling products (excluding cancelled orders)
+-- Understand product performance — useful for promotions, inventory planning, and marketing focus.
+
+SELECT Description, SUM(Quantity) AS total_sold, SUM(Quantity*UnitPrice) AS revenue
+FROM online_retail_dataset
+WHERE InvoiceNo NOT LIKE 'C%'
+GROUP BY Description
+ORDER BY total_sold DESC
+LIMIT 10;
+
+-- 2. Customer revenue and segmentation
+-- Identify top, average, and low spenders to target marketing and loyalty strategies.
+-- High: Focus on loyalty programs, exclusive offers
+-- Average: Encourage upselling with targeted promotions
+-- Low: Engage with discounts or personalized marketing
+
+SELECT CustomerID,
+       SUM(Quantity * UnitPrice) AS total_revenue,
+       CASE
+           WHEN SUM(Quantity * UnitPrice) >= 500 THEN 'High'
+           WHEN SUM(Quantity * UnitPrice) BETWEEN 200 AND 499 THEN 'Average'
+           ELSE 'Low'
+       END AS revenue_group
+FROM online_retail_dataset
+WHERE InvoiceNo NOT LIKE 'C%'
+GROUP BY CustomerID
+ORDER BY total_revenue DESC;
+
+-- 3. Number of customers in each revenue segment
+-- Helps understand the distribution of High, Average, and Low spenders.
+
+SELECT
+    SUM(CASE WHEN total_revenue >= 1000 THEN 1 ELSE 0 END) AS High_Customers,
+    SUM(CASE WHEN total_revenue BETWEEN 500 AND 999 THEN 1 ELSE 0 END) AS Average_Customers,
+    SUM(CASE WHEN total_revenue < 500 THEN 1 ELSE 0 END) AS Low_Customers
+FROM (
+SELECT CustomerID, SUM(Quantity * UnitPrice) AS total_revenue
+    FROM online_retail_dataset
+    WHERE InvoiceNo NOT LIKE 'C%'
+    GROUP BY CustomerID
+) AS customer_totals;
+
+
+-- 4. Repeat purchases per customer
+-- Identify products purchased multiple times by the same customer.
+-- Useful for personalized recommendations, bundling, loyalty campaigns, and stock management.
+SELECT o1.CustomerID, o1.Description, SUM(o1.Quantity) AS total_quantity
+FROM online_retail_dataset o1
+GROUP BY o1.CustomerID, o1.Description
+HAVING total_quantity > 1
+ORDER BY total_quantity DESC;
+
+-- 5. Revenue by country (including cancelled orders)
+-- Shows top and bottom performing countries and the impact of cancellations.
+-- Useful for marketing strategy, stock allocation, and operational improvements.
+SELECT Country, Valid_Revenue, Cancelled_Revenue, Total_Revenue,
+       RANK() OVER (ORDER BY Valid_Revenue DESC) AS Revenue_Rank
+FROM (
+    SELECT 
+        Country,
+        SUM(CASE WHEN InvoiceNo NOT LIKE 'C%' THEN Quantity*UnitPrice ELSE 0 END) AS Valid_Revenue,
+        SUM(CASE WHEN InvoiceNo LIKE 'C%' THEN Quantity*UnitPrice ELSE 0 END) AS Cancelled_Revenue,
+        SUM(Quantity*UnitPrice) AS Total_Revenue
+    FROM online_retail_dataset
+    GROUP BY Country
+) AS country_revenue
+ORDER BY Revenue_Rank;
+
+
+
+
+
+
+

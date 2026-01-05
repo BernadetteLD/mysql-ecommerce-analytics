@@ -1,4 +1,4 @@
-Exploratory Data Analysis
+**Exploratory Data Analysis**
 
 After cleaning the dataset, I performed Exploratory Data Analysis (EDA) to gain insights into sales,
 customers, products, and overall business performance. The goal of EDA was to identify patterns, trends,
